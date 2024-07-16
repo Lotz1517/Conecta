@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio | Conecta </title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>
+            <a href="#" id="home-link">
+                <img width="20%" src="Imagenes\Conecta Logo.jpg" alt="Conecta Logo">
+            </a>            
+        </h1>
+    </header>
+    <div class="navbar">
+        <button id="profile-button">Perfil</button>
+        <button id="inscripcion-button">Inscribirse como Empresa</button>
+        <button id="calificar-button">Calificar Empresa</button>
+        <button id="solicitar-servicios-button">Servicios para Cliente</button>
+        <button id="ver-calificacion-button">Puntuación de Empresas</button>
+        <button id="ver-estadisticas-button"> Solicitudes</button>
+        <button id="cerrar-sesion-button">Cerrar Sesión</button>
+    </div>
+    <div class="content" id="content">
+        <!-- El contenido dinámico se cargará aquí -->
+        <h2>Bienvenido a Conecta Servicios</h2>
+        <p>​​Tu plataforma confiable y eficiente que te conecta con profesionales de diversos servicios con clientes cerca de tí, facilitandote transacciones seguras y eficientes.​ </p>
+        <p>Seleccione una opción de la barra de navegación.</p>
+    </div>
+    <script src="scripts.js"></script>
+
+    <!-- validando ******************************************************************** Ramiro V-->
+    <script>
+        const professionals = [
+            { id: 1, name: 'Plomeria Pérez', category: 'Plomería', rating: 5, services: 'Reparaciones de tuberías, Instalaciones de sanitarios', details: 'Juan tiene más de 10 años de experiencia en plomería. Ha trabajado en múltiples proyectos residenciales y comerciales.' },
+            { id: 2, name: 'Elecronica García', category: 'Electricidad', rating: 4, services: 'Instalaciones eléctricas, Reparaciones de cortocircuitos', details: 'María es una electricista certificada con 8 años de experiencia. Es conocida por su atención al detalle y seguridad en el trabajo.' },
+            { id: 3, name: 'Carpinteria López', category: 'Carpintería', rating: 5, services: 'Fabricación de muebles, Reparaciones de puertas', details: 'Carlos es un maestro carpintero con más de 15 años de experiencia. Sus trabajos son altamente valorados por su precisión y calidad.' },
+            { id: 3, name: 'Albañileria Manuel', category: 'Albañileria', rating: 4, services: 'Pisos paredes losas cercas de concreto para todo publico', details: 'Julian es un maestro de obras de construccion con más de 17 años de experiencia. Sus trabajos son altamente valorados y garantizados por su precisión y calidad.' },
+        ];
+
+        function searchServices() {
+            const category = document.getElementById('category').value;
+            const profilesDiv = document.getElementById('profiles');
+            profilesDiv.innerHTML = '';
+            const filteredProfessionals = professionals.filter(professional => professional.category === category);
+            filteredProfessionals.forEach(professional => {
+                const div = document.createElement('div');
+                div.className = 'result-item';
+                div.innerHTML = `
+                    <p><strong>Empresa:</strong> ${professional.name}</p>
+                    <p><strong>Calificación:</strong> ${professional.rating} Estrellas</p>
+                    <p><strong>Servicios:</strong> ${professional.services}</p>
+                    <button onclick="viewProfile(${professional.id})">Ver Perfil</button>
+                `;
+                profilesDiv.appendChild(div);
+            });
+        }
+
+        function filterByRating() {
+            const rating = document.getElementById('rating').value;
+            const profilesDiv = document.getElementById('profiles');
+            profilesDiv.innerHTML = '';
+            const filteredProfessionals = professionals.filter(professional => professional.rating == rating);
+            filteredProfessionals.forEach(professional => {
+                const div = document.createElement('div');
+                div.className = 'result-item';
+                div.innerHTML = `
+                    <p><strong>Empresa:</strong> ${professional.name}</p>
+                    <p><strong>Calificación:</strong> ${professional.rating} Estrellas</p>
+                    <p><strong>Servicios:</strong> ${professional.services}</p>
+                    <button onclick="viewProfile(${professional.id})">Ver Perfil</button>
+                `;
+                profilesDiv.appendChild(div);
+            });
+        }
+
+        function viewProfile(id) {
+            const professional = professionals.find(pro => pro.id === id);
+            const profileDiv = document.getElementById('professionalDetail');
+            profileDiv.innerHTML = `
+                <p><strong>Empresa:</strong> ${professional.name}</p>
+                <p><strong>Categoría:</strong> ${professional.category}</p>
+                <p><strong>Calificación:</strong> ${professional.rating} Estrellas</p>
+                <p><strong>Servicios:</strong> ${professional.services}</p>
+                <p><strong>Detalles:</strong> ${professional.details}</p>
+            `;
+            profileDiv.style.display = 'block';
+        }
+
+        function reserveService() {
+            const date = document.getElementById('serviceDate').value;
+            const time = document.getElementById('serviceTime').value;
+            if (date && time) {
+                const confirmationMessage = `
+                    Reserva confirmada:<br>
+                    <strong>Fecha:</strong> ${date}<br>
+                    <strong>Hora:</strong> ${time}
+                `;
+                document.getElementById('confirmationMessage').innerHTML = confirmationMessage;
+                document.getElementById('confirmation').style.display = 'block';
+                document.getElementById('reservationForm').style.display = 'none';
+                document.getElementById('modify-cancel').style.display = 'block';
+            } else {
+                alert('Por favor, completa todos los campos.');
+            }
+        }
+
+        function showPayment() {
+            document.getElementById('payment-section').style.display = 'block';
+        }
+
+        function confirmPayment() {
+            alert('Pago confirmado. Gracias por su reserva.');
+        }
+
+        function modifyReservation() {
+            document.getElementById('confirmation').style.display = 'none';
+            document.getElementById('reservationForm').style.display = 'block';
+            document.getElementById('modify-cancel').style.display = 'none';
+        }
+
+        function cancelReservation() {
+            if (confirm('¿Estás seguro de que quieres cancelar la reserva?')) {
+                document.getElementById('confirmation').style.display = 'none';
+                document.getElementById('reservationForm').style.display = 'block';
+                document.getElementById('modify-cancel').style.display = 'none';
+                alert('Reserva cancelada.');
+            }
+        }
+    </script>
+     <!-- validando ******************************************************************** Ramiro V-->
+</body>
+</html>
